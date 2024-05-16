@@ -1,18 +1,20 @@
 import "./App.css";
-import Header from "./components/Header";
 import Home from "./components/Home";
 import Diary from "./components/Diary";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HeaderRef from "./components/HeaderRef";
+import Header from "./components/Header";
+import Test from "./components/Test";
+
 
 function App() {
   return (
     <>
       <Router>
-        <HeaderRef />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/diary" element={<Diary />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </Router>
     </>

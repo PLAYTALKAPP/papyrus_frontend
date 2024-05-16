@@ -4,6 +4,10 @@ export const content = [
 	'./index.html'
 ];
 export const theme = {
-	extend: {},
+	extend: {
+		fontFamily: {
+      sans: ['Noto Sans KR', 'sans-serif'],
+    },
+	},
 };
 export const plugins = [];

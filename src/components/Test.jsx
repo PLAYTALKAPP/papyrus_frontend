@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import Instance from '../../axiosConfig';
 import axios from 'axios';
 
 export default function Test() {
@@ -14,7 +13,13 @@ export default function Test() {
 
   return (
     <div>
-      {data.map((user)=>(user.user_name))} 
+      <ul>
+      {data.map((user)=>(
+        <li>
+        {user.user_name} - {user.user_id}
+        </li>
+      ))} 
+      </ul>
     </div>
   );
 }

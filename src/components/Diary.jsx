@@ -1,7 +1,9 @@
+import DiaryItem from "./DiaryItem";
 import DiarySidelist from "./DiarySidelist";
 
-
 export default function Diary() {
+  const isDiaryItem = false;
+ 
 	return (
 		<> 
     
@@ -10,11 +12,13 @@ export default function Diary() {
         <DiarySidelist/>
       </div>
       <div className="w-5/6  bg-amber-100 p-6">
-          컨텐츠내용
+       {isDiaryItem?  < DiaryItem /> : 
+       <p>임시화면입니다.</p>}
       </div>
     </div>
 
 
     </>
   )
+ 
 }

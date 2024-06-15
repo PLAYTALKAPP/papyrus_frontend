@@ -4,6 +4,8 @@ import Diary from "./components/Diary";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Test from "./components/Test";
+import DiaryItem from "./components/DiaryItem";
+import UserJoin from "./components/UserJoin";
 
 
 function App() {
@@ -14,7 +16,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/diary" element={<Diary />} />
+          <Route path="/diary/:diary_id" element={<DiaryItem />} />
           <Route path="/test" element={<Test />} />
+          <Route path="/join" element={<UserJoin/>} />
         </Routes>
       </Router>
     </>

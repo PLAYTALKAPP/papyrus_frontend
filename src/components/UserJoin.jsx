@@ -3,14 +3,15 @@ import { useNavigate,useParams } from "react-router-dom";
 import axios from 'axios';
 
 export default function UserJoin() {
+  const navigator = useNavigate();
   const [inputUser, setInputUser] = useState({
     user_id: "",
     user_name: "",
     user_pw: "",
     phone: "",
     email: "",
-    profile_img: null,
   });
+  const [profileImg,setProfileImg] = useState("");
 
   const [isUserIdAvailable, setIsUserIdAvailable] = useState(false);
 
@@ -18,20 +19,20 @@ export default function UserJoin() {
     const { name, value } = e.target;
     setInputUser({
       ...inputUser,
-      [name]: value
+      [name]: value,  
     });
      // 아이디가 변경되면 다시 중복 체크를 하도록 설정
      if (name === 'user_id') {
       setIsUserIdAvailable(false);
     }
   };
-  
+
+  //파일전용 전송핸들러
   const handleFileChange = (e) => {
-    setInputUser({
-      ...inputUser,
-      profile_img: e.target.files[0]
-    });
-  };
+    setProfileImg(e.target.files[0]);
+};
+  
+
 
   const idCheck = async () => {
     try {
@@ -48,10 +49,10 @@ export default function UserJoin() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!isUserIdAvailable) {
-      alert('아이디 중복을 확인해주세요.');
-      return;
-    }
+    // if (!isUserIdAvailable) {
+    //   alert('아이디 중복을 확인해주세요.');
+    //   return;
+    // }
 
     try {
       const formData = new FormData();
@@ -60,9 +61,8 @@ export default function UserJoin() {
       formData.append('user_pw', inputUser.user_pw);
       formData.append('phone', inputUser.phone);
       formData.append('email', inputUser.email);
-      formData.append('profile_img', inputUser.profile_img);
-
-      await axios.post('/api/addUser', formData);
+      formData.append('profile_img',profileImg);
+      await axios.post('/api/addUser', formData, {headers:{'Content-Type':'multipart/form-data'}});
       alert('회원 등록에 성공하였습니다. 로그인해주세요.');
       navigator("/");
     } catch (error) {
@@ -75,7 +75,7 @@ export default function UserJoin() {
     <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md rounded overflow-hidden shadow-lg grid place-items-center w-3/4 py-10 bg-indigo-50">
         <div className="font-bold text-xl py-3">SignUp</div>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} encType='multipart/form-data' method='post' >
           <table>
             <tbody>
               <tr>
@@ -158,9 +158,10 @@ export default function UserJoin() {
                     file:rounded-none file:border-0 file:border-e file:border-solid file:border-inherit file:bg-blue-600 file:text-slate-50 file:px-3  
                     file:py-[0.32rem] file:text-surface focus:border-primary focus:text-gray-700 focus:shadow-inset focus:outline-none dark:border-white/70 dark:text-white  file:dark:text-white"
                     type="file"
-                    name='profile_img'
+                    name={profileImg}
                     onChange={handleFileChange}
                   />
+               
                 </td>
               </tr>
             </tbody>

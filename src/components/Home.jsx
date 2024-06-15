@@ -5,6 +5,7 @@ import axios from 'axios';
 
 
 export default function Home() {
+	const navigator = useNavigate();
 	const [loginInfo, setLoginInfo] = useState({
 		user_id: "",
     user_pw: ""   
@@ -20,12 +21,23 @@ export default function Home() {
   
 	const onLogin= async (e)=>{
 		e.preventDefault();
-		
+		if(loginInfo.user_id ===""){
+			alert(`아이디를 입력해주세요.`);
+			return;
+		}
+		if(loginInfo.user_pw===""){
+			alert(`비밀번호를 입력해주세요.`);
+			return;
+		}
     try {
       const response = await axios.post('/api/loginUser',  { user_id: loginInfo.user_id, user_pw:loginInfo.user_pw });
 			const userInfo = response.data
+			// 로그인 성공 시 쿠키에 세션 정보 저장(Back에서 해당 정보 암호화 해서 변형해야함)
+			document.cookie = `userId=${userInfo.user_id}; path=/;`;
+			document.cookie = `userPw=${userInfo.user_pw}; path=/;`;
+			// document.cookie = `userName=${userInfo.user_name}; path=/;`;
       alert(`로그인에 성공하였습니다. ${userInfo.user_name}님 반갑습니다.`);
-      // navigator("");
+      navigator("/diary");
     } catch (error) {    
       alert(`로그인에 실패하였습니다. 다시 로그인해주세요.`);
     }

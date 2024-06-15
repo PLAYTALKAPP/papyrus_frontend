@@ -2,14 +2,20 @@ import { Link } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import { useNavigate,useParams } from "react-router-dom";
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 
 export default function Home() {
 	const navigator = useNavigate();
 	const [loginInfo, setLoginInfo] = useState({
 		user_id: "",
-    user_pw: ""   
+    user_pw: "" ,
+		user_name:""  
   });
+	const [cookies, setCookie, removeCookie] = useCookies(['user_info']);
+  const saveUserInfoToCookie = (userData) => {
+    setCookie('user_info', userData, { path: '/', maxAge: 3600 });
+  };
 
 	const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,18 +36,33 @@ export default function Home() {
 			return;
 		}
     try {
-      const response = await axios.post('/api/loginUser',  { user_id: loginInfo.user_id, user_pw:loginInfo.user_pw });
+      const response = await axios.post('/api/login',  { user_id: loginInfo.user_id, user_pw:loginInfo.user_pw });
 			const userInfo = response.data
 			// 로그인 성공 시 쿠키에 세션 정보 저장(Back에서 해당 정보 암호화 해서 변형해야함)
-			document.cookie = `userId=${userInfo.user_id}; path=/;`;
-			document.cookie = `userPw=${userInfo.user_pw}; path=/;`;
+			// document.cookie = `userId=${userInfo.user_id}; path=/;`;
+			// document.cookie = `userPw=${userInfo.user_pw}; path=/;`;
 			// document.cookie = `userName=${userInfo.user_name}; path=/;`;
+			loadLoginUserInfo();
+
       alert(`로그인에 성공하였습니다. ${userInfo.user_name}님 반갑습니다.`);
       navigator("/diary");
     } catch (error) {    
       alert(`로그인에 실패하였습니다. 다시 로그인해주세요.`);
     }
 	};
+    const loadLoginUserInfo = async () => {
+      try {
+        const response = await axios.get('/api/userInfo');
+        const userData = response.data;
+        setLoginInfo(userData);
+        // setIsLogin(true);
+        saveUserInfoToCookie(userData);
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      }
+    };
+
+
 	return (
 		<>
 		<div className="min-h-screen flex items-center justify-center">

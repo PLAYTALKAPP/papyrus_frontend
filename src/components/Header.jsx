@@ -1,57 +1,66 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
-export default function HeaderRef() {
+export default function Header ()  {
   const navigator = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(['user_info']);
   const [isLogin, setIsLogin] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [userInfo, setUserInfo] = useState({
+    user_id: '',
+    user_name: '',
+    user_pw: '',
+  });
 
   useEffect(() => {
-    const userIdFromCookie = getUserIdFromCookie();
+    const userIdFromCookie = cookies.user_info;
     if (userIdFromCookie) {
-      setIsLogin(true);
-      setUserId(userIdFromCookie);
-    }
-  }, []); 
+          setIsLogin(true);
+          setUserInfo(userIdFromCookie);
+      }
+  }, [cookies]);
 
-  const getUserIdFromCookie = () => {
-    const cookies = document.cookie.split('; ');
-    const userIdCookie = cookies.find(cookie => cookie.startsWith('userId='));
-    if (userIdCookie) {
-      return userIdCookie.split('=')[1];
-    }
-    return null;
+  const removeUserInfoFromCookie = () => {
+    removeCookie('user_info');
   };
 
-  const onLogout = () => {
-    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie = 'userPw=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    setIsLogin(false);
-    setUserId(null);
-    // 로그아웃 후
-    navigator('/');
+
+  const handleLogout = () => {
+    axios.post('/api/logout')
+      .then(response => {
+        setIsLogin(false);
+        setUserInfo({});
+        removeUserInfoFromCookie();
+        navigator('/');
+      })
+      .catch(error => {
+        console.error('Logout error:', error);
+      });
   };
-  //로그인 하면 홈클릭시 보이는 화면 설정해야함.
+
   return (
     <div>
       <header>
         <nav className="flex items-center justify-between flex-wrap bg-amber-500 p-6">
           <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
             <div className="text-sm lg:flex-grow">
-              { isLogin ? <Link to="/diary" className="mr-4">홈</Link> :
+              {isLogin ? <Link to="/diary" className="mr-4">홈</Link> :
                 <Link to="/" className="mr-4">홈</Link>
               }
               <Link to="/diary" className="mr-4">다이어리</Link>
               <Link to="/test" className="mr-4">테스트</Link>
             </div>
             <div>
-              {isLogin && `${userId}님 `}
-              {isLogin && <button onClick={onLogout}>로그아웃</button>}
+              {isLogin && `${userInfo.user_name}님 `}
+              {isLogin && <button onClick={handleLogout}>로그아웃</button>}
             </div>
           </div>
         </nav>
       </header>
     </div>
   );
-}
+};
+
+

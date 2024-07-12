@@ -1,3 +1,6 @@
+/**
+ * 로그인 유지를 위한 CONTEXTS
+ */
 import React, { createContext, useState, useContext } from 'react';
 
 const AuthContext = createContext();

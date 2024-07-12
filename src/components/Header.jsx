@@ -13,6 +13,13 @@ export default function Header ()  {
     user_name: '',
     user_pw: '',
   });
+  useEffect(() => {
+    const userIdFromCookie = cookies.user_info;
+    if (userIdFromCookie) {
+          setIsLogin(true);
+          setUserInfo(userIdFromCookie);
+      }
+  }, [cookies]);
 
   useEffect(() => {
     const userIdFromCookie = cookies.user_info;
@@ -53,6 +60,7 @@ export default function Header ()  {
               <Link to="/test" className="mr-4">테스트</Link>
             </div>
             <div>
+              {!isLogin && <Link to="/Login" className="mr-4"  >로그인</Link>}
               {isLogin && `${userInfo.user_name}님 `}
               {isLogin && <button onClick={handleLogout}>로그아웃</button>}
             </div>

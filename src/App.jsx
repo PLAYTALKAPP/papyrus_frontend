@@ -1,26 +1,37 @@
 import "./App.css";
 import Home from "./components/Home";
 import Diary from "./components/Diary";
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Test from "./components/Test";
 import DiaryItem from "./components/DiaryItem";
 import UserJoin from "./components/UserJoin";
+import Login from "./components/Login";
+import { CookiesProvider } from 'react-cookie';
+
 
 
 function App() {
+
+
   return (
     <>
+    <CookiesProvider>
       <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/diary" element={<Diary />} />
-          <Route path="/diary/:diary_id" element={<DiaryItem />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/join" element={<UserJoin/>} />
-        </Routes>
-      </Router>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/diary" element={<Diary />} >
+              <Route path="/diary/:diary_id" element={<DiaryItem/>} />
+            </Route>            
+            <Route path="/test" element={<Test />} />
+            <Route path="/join" element={<UserJoin/>} />
+          </Routes>
+        </Router>
+    </CookiesProvider>
+     
     </>
   );
 }

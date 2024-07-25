@@ -1,19 +1,22 @@
 import "./App.css";
-import Home from "./components/Home";
-import Diary from "./components/Diary";
+
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Test from "./components/Test";
-import DiaryItem from "./components/DiaryItem";
-import UserJoin from "./components/UserJoin";
-import Login from "./components/Login";
+import Header from "./pages/Header";
+import Home from "./pages/Home";
+import Diary from "./pages/Diary";
+import Test from "./pages/Test";
+import DiaryItem from "./pages/DiaryItem";
+import UserJoin from "./pages/UserJoin";
+import Todo from "./pages/Todo";
+import TodoItem from "./pages/TodoItem";
+import TodoEdit from "./pages/TodoEdit";
+import Login from "./pages/Login";
 import { CookiesProvider } from 'react-cookie';
 
 
 
 function App() {
-
 
   return (
     <>
@@ -25,7 +28,11 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/diary" element={<Diary />} >
               <Route path="/diary/:diary_id" element={<DiaryItem/>} />
-            </Route>            
+            </Route>
+            <Route path="/todo" element={<Todo />} >           
+              <Route path="/todo/:todo_id" element={<TodoItem/>} />
+              <Route path="/todo/edit/:user_id" element={<TodoEdit/>} />              
+            </Route>
             <Route path="/test" element={<Test />} />
             <Route path="/join" element={<UserJoin/>} />
           </Routes>

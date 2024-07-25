@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate,useParams } from "react-router-dom";
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import Button from "../components/Button";
 
 
 export default function Login() {
@@ -90,13 +91,14 @@ export default function Login() {
 				<p><input type="checkbox"/>로그인 유지</p>
 
 				<div className="px-6 pt-4 pb-5">
-					<button className="rounded bg-indigo-500 hover:bg-indigo-700 p-1 px-2 text-white" >
-							<Link to = '/join'>가입</Link>
-							</button>
-					<button 
-						className="rounded bg-indigo-500 hover:bg-indigo-700 p-1 px-2 ml-2  text-white" 
-						type ="submit"
-						>로그인</button>
+					<Button 
+						text = {'회원가입'}
+						link = {'/join'}
+					/>	
+					<Button 
+						text = {'로그인'}
+						onClick = {onLogin}
+					/>	
 				</div>		
 			</form>	
 		</div>

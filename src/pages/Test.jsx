@@ -13,9 +13,9 @@ export default function Test() {
 
   return (
     <div>
-      <ul>
+      <ul >
       {data.map((user)=>(
-        <li>
+        <li key={user.user_id}>
         {user.user_name} - {user.user_id}
         </li>
       ))} 

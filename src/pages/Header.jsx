@@ -53,10 +53,10 @@ export default function Header ()  {
         <nav className="flex items-center justify-between flex-wrap bg-amber-500 p-6">
           <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
             <div className="text-sm lg:flex-grow">
-              {isLogin ? <Link to="/diary" className="mr-4">홈</Link> :
-                <Link to="/" className="mr-4">홈</Link>
-              }
-              <Link to="/diary" className="mr-4">다이어리</Link>
+              {isLogin ? <Link to="/diary" className="mr-4">홈</Link> : <Link to="/" className="mr-4">홈</Link> }
+              {isLogin ? <Link to="/diary" className="mr-4">다이어리</Link> : <Link to="/Login" className="mr-4">다이어리</Link> }
+              {isLogin ? <Link to="/todo" className="mr-4">TODO</Link> : <Link to="/Login" className="mr-4">테스트</Link> }
+                            
               <Link to="/test" className="mr-4">테스트</Link>
             </div>
             <div>

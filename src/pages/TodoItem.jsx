@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Button from '../components/Button';
+import ICONButton from '../components/ICONButton';
 
 export default function TodoItem() {
   const [todo, setTodo] = useState([]);
   const { todo_id } = useParams();
-
+  const [todoTitle, setTodoTitle] = useState("");
 
   useEffect(() => {
     if (todo_id) { 
       axios.get(`/api/todo/${todo_id}`)
         .then((response) => {
           setTodo(response.data);
-         
+          setTodoTitle(response.data[0].todo_cate);//XXX. 타이틀만 존재할때 타이틀만 뜨지않는현상있음 고쳐야됨.
         })
         .catch((error) => {
           console.log(error);
         });  
+        // console.log(todo);
       }  
   }, [todo_id]);
 
@@ -29,37 +32,44 @@ export default function TodoItem() {
       )
     );
   };
+  
+  const addList = () =>{};
 
-  if (!todo || todo.length=== 0) {
-    return (
-      <>
-      <div className="flex justify-center   h-screen">
-        <div className="text-center pt-20">
-          <p>아직 리스트가 없네요.리스트를 써주세요.</p>
-         </div>
-      </div>
-      </>
-    );
-  }
-
-  const category = todo[0].todo_cate;
   return (
     <div>
-      <h1>카테고리 : {category}</h1>
+      <h1>{todoTitle}</h1>
+      
+      <div className='p-5'>
          <ul>          
         {todo.map((item)=>(
-          <li key = {item.todolist_id} >
-                 <input
-                  type="checkbox"
-                  name="todo_checking"
-                  checked={item.todo_checking} // todo_checking 값이 true면 체크된 상태, false면 체크 해제 상태
-                  onChange={() => handleCheckboxChange(item.todolist_id)} // 체크박스 변경 시 처리할 함수 호출
-                />          
-               {item.description} 
-               
+          <li 
+            key = {item.todolist_id} 
+            className="flex items-center mb-2 space-x-2" 
+          >
+            <input
+                type="checkbox"
+                name="todo_checking"
+                checked={item.todo_checking}
+                onChange={() => handleCheckboxChange(item.todolist_id)} // 체크박스 변경 시 처리할 함수 호출
+                className='ml-1'
+              />          
+            <p>{item.description} </p> 
+            <ICONButton
+               type={'CANCLE'}
+             />
           </li>
         ))} 
         </ul>
+      </div>
+      
+      <div className='flex flex-row'>
+        <input type = 'text'/> 
+        <Button
+          text = {'+'}
+          link = {addList}
+        />
+      </div>
+
     </div>
   );
 }

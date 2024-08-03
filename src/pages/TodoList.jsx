@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext} from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
+import { ToDoContext } from '../contexts/TodoContext';
 
-export default function TodoList({cookieUserId}) {
-  const [userId,setUserId] = useState("");
-
-  useEffect(()=>{
-    setUserId(cookieUserId) ;   
-  },[cookieUserId]);
+export default function TodoList() {
+  const {userId,setUserId} = useContext(ToDoContext);
+  const {isEdit,setIsEdit} = useContext(ToDoContext);
+  const navigate = useNavigate();
 
   const [data,setData] = useState([]);  
 
@@ -23,18 +22,20 @@ export default function TodoList({cookieUserId}) {
     }
   },[userId]);//[]안의 조건이 변경될때 실행되도록 설정.
 
-  return (
-   
+  const listToItem = (todoId) => {
+    navigate(`/todo/${todoId}`);
+    setIsEdit(false);
+  };
+  return (   
       <div> 
         <ul>
-        {data.map((todo)=>(
-          
+        {data.map((todo)=>(          
           <li key = {todo.todo_id} >            
-            <Link    
-              to = {`/todo/${todo.todo_id}`}            
-              >
-            {todo.todo_cate} 
-            </Link>          
+          <button
+              onClick={() => listToItem(todo.todo_id)}
+              style={{ border: 'none', background: 'none', cursor: 'pointer' }} >
+              {todo.todo_cate}
+            </button>      
           </li>
         ))} 
         </ul>
